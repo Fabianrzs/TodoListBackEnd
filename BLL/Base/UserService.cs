@@ -27,6 +27,7 @@ namespace BLL.Base
                 var entity = _context.Users.FirstOrDefault(x=>x.UserName == user.UserName);
                 if (entity == null)
                 {
+                    user.Password = CrypterDefault.Encrypt(user.Password);
                     _context.Users.Add(user);
                     _context.SaveChanges();
                     return new GenericResponse<User>(user);
@@ -45,8 +46,8 @@ namespace BLL.Base
         {
             try
             {
-                var entity = _context.Users.FirstOrDefault(x => x.UserName == user.UserName && user.Password == x.Password);
-                if (entity != null)
+                var entity = _context.Users.FirstOrDefault(x => x.UserName == user.UserName);
+                if (entity != null && user.Password == CrypterDefault.Decrypt(entity.Password))
                 {
                     return new GenericResponse<User>(entity);
                 }

@@ -40,7 +40,6 @@ namespace BLL.Base
 
         public async Task<GenericResponse<Note>> GetAll(int id)
         {
-
             try
             {
                 IEnumerable<Note> entities = _repository.GetAll().Result.Where(x=>x.IdUser == id);

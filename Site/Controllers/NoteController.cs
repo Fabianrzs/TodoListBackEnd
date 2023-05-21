@@ -1,11 +1,8 @@
-﻿using BLL.Base;
-using BLL.Interface;
-using DAL;
-using DAL.Interface;
+﻿using BLL.Interface;
 using Entity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Site.Models;
-using System.Text.RegularExpressions;
 
 namespace Site.Controllers
 {
@@ -31,25 +28,25 @@ namespace Site.Controllers
 
 
         [HttpGet("list/{id}")]
-        public async Task<ActionResult<Note>> GetAll(int ID)
+        public async Task<ActionResult<Note>> GetAll(int id)
         {
-            var request = await _noteService.GetAll(ID);
+            var request = await _noteService.GetAll(id);
             return request.Error ? BadRequest(request.Message) : Ok(request.Entities);
         }
 
 
         [HttpPut("update/{id}")]
-        public async Task<ActionResult<Note>> Update(int ID, NoteDTO note)
+        public async Task<ActionResult<Note>> Update(int id, NoteDTO note)
         {
-            var request = await _noteService.Update(Mapping(note), ID);
+            var request = await _noteService.Update(Mapping(note), id);
             return request.Error ? BadRequest(request.Message) : Ok(request.Entity);
         }
 
 
         [HttpDelete("delete/{id}")]
-        public async Task<ActionResult<Note>> Delete(int ID)
+        public async Task<ActionResult<Note>> Delete(int id)
         {
-            var request = await _noteService.Delete(ID);
+            var request = await _noteService.Delete(id);
             return request.Error ? BadRequest(request.Message) : Ok(request.Entity);
         }
 

@@ -1,4 +1,5 @@
 using DAL;
+using Entity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -24,7 +25,7 @@ var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var services = builder.Services;
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnnetion");
+var connectionString = CrypterDefault.Decrypt(builder.Configuration.GetConnectionString("DefaultConnnetion"));
 services.AddDbContext<TodoListContext>(p => p.UseSqlServer(connectionString));
 
 //services.AddCors(options => options.AddPolicy("CorsPolicy",
@@ -54,7 +55,7 @@ services.Configure<AppSetting>(appSettingsSection);
 
 #region Configure jwt authentication inteprete el token 
 var appSettings = appSettingsSection.Get<AppSetting>();
-var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+var key = Encoding.ASCII.GetBytes(CrypterDefault.Decrypt(appSettings.Secret));
 services.AddControllers();
 services.AddCors();
 
@@ -140,6 +141,7 @@ app.UseCors(x => x
 .AllowCredentials());
 
 app.UseAuthentication();
+app.UseAuthorization();
 #endregion
 
 app.MapControllerRoute(
